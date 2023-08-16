@@ -1,1 +1,3 @@
-This is start
+HOTEL SERVICE => DB1
+USER SERVICE => DB2
+RATING SERVICE => DB3  will gonna communicate through these modules
