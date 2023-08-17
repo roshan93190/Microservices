@@ -1,0 +1,15 @@
+After creating all the services we need we need to create a ServiceRegistry
+
+
+In which we need to import or add two new dependency these are cloud bootstrap, eureka server.
+In the main file we need to mark as  @EnableEurekaServer.
+
+minimal configuration karni hain
+
+
+eureka.instance.hostname=localhost
+
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+
+server.port=8761
