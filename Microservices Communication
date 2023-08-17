@@ -1,0 +1,64 @@
+# Api or Microservices Communication
+
+
+
+
+
+package com.hotel.serviceImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.hotel.exceptions.ResourceNotFoundException;
+import com.hotel.model.User;
+import com.hotel.repo.UserRepo;
+import com.hotel.service.UserService;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+	@Autowired
+	private UserRepo userRepo;
+
+	@Autowired
+	RestTemplate restTemplate;
+	private String url = "http://localhost:8083/ratings/users/";
+
+	private Logger logger = org.slf4j.LoggerFactory.getLogger(UserServiceImpl.class.getClass());
+
+	@Override
+	public User saveUser(User user) {
+
+		String id = UUID.randomUUID().toString();
+		user.setUserId(id);
+		User save = this.userRepo.save(user);
+
+		return save;
+	}
+
+	@Override
+	public User getUser(String id) {
+
+		ArrayList forObject = restTemplate.getForObject(url + id, ArrayList.class);
+
+ 
+		User user = this.userRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("user not found with give id " + id));
+		user.setRatings(forObject);
+		return user;
+	}
+
+	@Override
+	public List<User> allUsers() {
+
+		List<User> findAll = this.userRepo.findAll();
+		return findAll;
+	}
+
+}
